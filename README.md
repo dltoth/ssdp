@@ -31,8 +31,8 @@ LOCATION: http://10.0.0.165:80/rootDeviceTarget/embeddedDeviceTarget
 </pre>
 <p>for the HTML UI of a UPnPDevice whose target is set to <i>embeddedDeviceTarget</i>.</p>
 <p>A more comprehensive description of the protocol is given in the companion SSDP User Guide document.</p>
-<h2>Simple Example</h2>
-What follows below is an Arduino sketch example for ESP8266<br>
+<h2>Simple UPnPDevice Example</h2>
+Below is an Arduino sketch example for ESP8266 that populates a simple device hirearchy and responds to search requests:<br>
 <code><pre>
 #include "ssdp.h"
 using namespace lsc;
@@ -123,3 +123,39 @@ Device 1:
          Type: urn:LeelanauSoftwareCo-com:service:Basic:1
          Location is http://10.0.0.165:80/device/embededDevice/service1
 </pre>
+
+<h2>Simple Query Example</h2>
+<p>Below is an Arduino sketch for ESP8266 that queries for RootDevices and prints the result to Serial:</p>
+<code><pre>
+#include "ssdp.h"
+using namespace lsc;
+#define AP_SSID "MySSID"
+#define AP_PSK  "MyPSK"
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+
+  Serial.println();
+  Serial.printf("Starting SSDP Query Test for Board %s\n",BOARD);
+
+  WiFi.begin(AP_SSID,AP_PSK);
+  Serial.printf("Connecting to Access Point %s\n",AP_SSID);
+  while(WiFi.status() != WL_CONNECTED) {Serial.print(".");delay(500);}
+
+  Serial.printf("\nWiFi Connected to %s with IP address: %s\n",WiFi.SSID().c_str(),WiFi.localIP().toString().c_str());
+  
+  // Perform an SSDP search for RootDevices and print display name and location
+  SSDP::searchRequest("upnp:rootdevice",([](UPnPBuffer* b){
+      char name[32];
+      if( b->displayName(name,32) ) {
+        char loc[64];
+        if( b->headerValue_P(LocationHeader,loc,64) ) Serial.printf("Device %s is at location %s\n",name,loc);
+        }  
+      }),WiFi.localIP(),5000);
+}
+
+void loop() {}
+</code></pre>

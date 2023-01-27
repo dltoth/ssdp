@@ -150,7 +150,7 @@ void setup() {
   
   // Perform an SSDP search for RootDevices and print display name and location
   SSDP::searchRequest("upnp:rootdevice",([](UPnPBuffer* b){
-      char name[32];
+      char name[32];
       if( b->displayName(name,32) ) {
          char loc[64];
          if( b->headerValue_P(LocationHeader,loc,64) ) Serial.printf("Device %s is at location %s\n",name,loc);

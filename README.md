@@ -126,9 +126,9 @@ Device 1:
 
 <h2>Simple Query Example</h2>
 <p>Below is an Arduino sketch for ESP8266 that queries for RootDevices and prints the result to Serial:</p>
-<code><pre>
+  <code></pre>
 #include "ssdp.h"
-#include <ESP8266WiFi.h>
+#include &LT;ESP8266WiFi.h&GT;
 using namespace lsc;
 #define AP_SSID "MySSID"
 #define AP_PSK  "MyPSK"
@@ -159,4 +159,4 @@ void setup() {
 }
 
 void loop() {}
-</code></pre>
+  </code></pre>

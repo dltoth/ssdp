@@ -33,7 +33,8 @@ LOCATION: http://10.0.0.165:80/rootDeviceTarget/embeddedDeviceTarget
 <p>A more comprehensive description of the protocol is given in the companion SSDP User Guide document.</p>
 <h2>Simple UPnPDevice Example</h2>
 Below is an Arduino sketch example for ESP8266 that populates a simple device hirearchy and responds to search requests:<br>
-<code><pre>
+
+```
 #include "ssdp.h"
 using namespace lsc;
 
@@ -98,11 +99,12 @@ void loop() {
    server.handleClient();    // Handle HTTP requests for the RootDevice
    root.doDevice();          // Do unit of work for device
 }
-</pre></code>
+```
+  
 <p>Notice that the RootDevice display name is set to <i>Device Test</i> and target is set to <i>device</i>, the embedded UPnPDevice display name is set to <i>Device 1</i> and target is set to <i>embeddedDevice</i>, and the UPnPService display name is set to <i>Service 1</i> where target is set to <i>service1</i>.</p>
 <p>Output from the Serial port will be:</p><br>
-<pre>
 
+```
 Starting UPnPDevice Test for Board ESP8266
 Connecting to Access Point My_SSID
 ...........
@@ -122,13 +124,15 @@ Device 1:
       Service 1:
          Type: urn:LeelanauSoftwareCo-com:service:Basic:1
          Location is http://10.0.0.165:80/device/embededDevice/service1
-</pre>
+```
 
 <h2>Simple Query Example</h2>
 <p>Below is an Arduino sketch for ESP8266 that queries for RootDevices and prints the result to Serial:</p>
-  <code></pre>
+
+```
 #include "ssdp.h"
-#include &LT;ESP8266WiFi.h&GT;
+#include <ESP8266WiFi.h>
+
 using namespace lsc;
 #define AP_SSID "MySSID"
 #define AP_PSK  "MyPSK"
@@ -158,5 +162,6 @@ void setup() {
     }),WiFi.localIP(),5000);
 }
 
-void loop() {}
-  </code></pre>
+void loop() {
+}
+```

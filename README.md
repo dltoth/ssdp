@@ -128,6 +128,7 @@ Device 1:
 <p>Below is an Arduino sketch for ESP8266 that queries for RootDevices and prints the result to Serial:</p>
 <code><pre>
 #include "ssdp.h"
+#include <ESP8266WiFi.h>
 using namespace lsc;
 #define AP_SSID "MySSID"
 #define AP_PSK  "MyPSK"
@@ -135,7 +136,7 @@ using namespace lsc;
 void setup() {
   Serial.begin(115200);
   while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
+     ; // wait for serial port to connect. Needed for native USB port only
   }
 
   Serial.println();
@@ -149,12 +150,12 @@ void setup() {
   
   // Perform an SSDP search for RootDevices and print display name and location
   SSDP::searchRequest("upnp:rootdevice",([](UPnPBuffer* b){
-      char name[32];
-      if( b->displayName(name,32) ) {
-        char loc[64];
-        if( b->headerValue_P(LocationHeader,loc,64) ) Serial.printf("Device %s is at location %s\n",name,loc);
-        }  
-      }),WiFi.localIP(),5000);
+      char name[32];
+      if( b->displayName(name,32) ) {
+         char loc[64];
+         if( b->headerValue_P(LocationHeader,loc,64) ) Serial.printf("Device %s is at location %s\n",name,loc);
+      }  
+    }),WiFi.localIP(),5000);
 }
 
 void loop() {}

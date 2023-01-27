@@ -157,7 +157,7 @@ void setup() {
       char name[32];
       if( b->displayName(name,32) ) {
          char loc[64];
-         if( b->headerValue_P("LOCATION",loc,64) ) Serial.printf("Device %s is at location %s\n",name,loc);
+         if( b->headerValue("LOCATION",loc,64) ) Serial.printf("Device %s is at location %s\n",name,loc);
       }  
     }),WiFi.localIP(),5000);
 }

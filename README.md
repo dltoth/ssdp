@@ -10,13 +10,29 @@ SSDP is an abbreviated version of [UPnP SSDP](http://upnp.org/specs/arch/UPnP-ar
 </ol>
 <br>
 <p>SSDP is chatty and could easily consume a small device responding to unnecessary requests. To this end a custom Search Target header, ST.LEELANAUSOFTWARECO.COM,is added. Search requests without this header are silently ignored. This abreviated protocol does not advertise on startup or shutdown, thus avoiding a flurry of unnecessary UPnP activiy. Devices respond ONLY to specific queries, and ignore all other SSDP requests.</p>
-<p>In order to succinctly describe device hierarchy, a custom response header, DESC.LEELANAUSOFTWARECO.COM, is added. Search responses without this header are ignored. The DESC header includes a custom field descriptor, puuid, which refers to the parent uuid of a given UPnPDevice (or UPnPService). In this implementation of UPnP, RootDevices can have UPnPServices and UPnPDevices, and UPnPDevices can only have UPnPServices. The maximum number of embedded devices (or services) is restricted 8, thus limiting the device hierarchy. The DESC header field can implicitly refer to a either a RootDevice, an embedded UPnPDevice, or a UPnPService. When coupled with the Unique Service Name (USN), a complete device description in context is given.</P>
+<p>In order to succinctly describe device hierarchy, a custom response header, DESC.LEELANAUSOFTWARECO.COM, is added. Search responses without this header are ignored. The DESC header includes a custom field descriptor, puuid, which refers to the parent uuid of a given UPnPDevice (or UPnPService). In this implementation of UPnP, RootDevices can have UPnPServices and UPnPDevices, and UPnPDevices can only have UPnPServices. The maximum number of embedded devices (or services) is restricted 8, thus limiting the device hierarchy. The DESC header field can implicitly refer to a either a RootDevice, an embedded UPnPDevice, or a UPnPService. When coupled with the Unique Service Name (USN), a complete device description in context is given. For example:</P>
+<pre>
+DESC.LEELANAUSOFTWARECO.COM: name:displayName:devices:num-devices:services:num-services
+</pre>
+<p>for a RootDevice with <i>num-devices</i> embedded UPnPDevices, <i>num-services</i> UPnPServices, and whose display name is set to <i>displayName</i> and</p>
+<pre>
+DESC.LEELANAUSOFTWARECO.COM: name:displayName:services:num-services:puuid:parent-uuid
+</pre>
+<p>for a UPnPDevice with <i>num-services</i> UPnPServices, whose display name is set to <i>displayName</i> and whose RootDevice uuid is <i>parent-uuid</i>.</p>
+<p>Another important difference between this variant of SSDP and standard UPnP/SSDP is that the LOCATION header provides a URL of an HTML UI for a UPnPDevice (or RootDevice), or service interface for a UPnPService. For example:</p>
+<pre>
+LOCATION: http://10.0.0.165:80/rootDeviceTarget/
+</pre>
+<p>for the HTML UI of a RootDevice whose target is set to <i>rootDeviceTarget</i>, or </p>
+<pre>
+LOCATION: http://10.0.0.165:80/rootDeviceTarget/embeddedDeviceTarget
+</pre>
+<p>for the HTML UI of a UPnPDevice whose target is set to <i>embeddedDeviceTarget</i>.</p>
 <p>A more comprehensive description of the protocol is given in the companion SSDP User Guide document.</p>
 <h2>Simple Example</h2>
 What follows below is an Arduino sketch example for ESP8266<br>
 <code><pre>
 #include "ssdp.h"
-
 using namespace lsc;
 
 #define AP_SSID "MySSID"
@@ -80,9 +96,9 @@ void loop() {
    server.handleClient();    // Handle HTTP requests for the RootDevice
    root.doDevice();          // Do unit of work for device
 }
-
 </pre></code>
-Output from the Serial port will be:<br>
+<p>Notice that the RootDevice display name is set to <i>Device Test</i> and target is set to <i>device</i>, the embedded UPnPDevice display name is set to <i>Device 1</i> and target is set to <i>embeddedDevice</i>, and the UPnPService display name is set to <i>Service 1</i> where target is set to <i>service1</i>.</p>
+<p>Output from the Serial port will be:</p><br>
 <pre>
 
 Starting UPnPDevice Test for Board ESP8266

@@ -61,7 +61,8 @@ ESP8266WebServer  server(SERVER_PORT);
 #define           BOARD "ESP8266"
 
 //
-//   WebContext is a Web Server abstraction framework with implementations for both ESP8266 and ESP32.
+//   WebContext is a Web Server abstraction framework with implementations for both ESP8266 and 
+//   ESP32.
 //
 WebContext       ctx;
 
@@ -84,14 +85,15 @@ void setup() {
   while(WiFi.status() != WL_CONNECTED) {Serial.print(".");delay(500);}
 
   Serial.printf("\nWiFi Connected to %s with IP address: %s\n",WiFi.SSID().c_str(),
-                                                               WiFi.localIP().toString().c_str());
+                                                              WiFi.localIP().toString().c_str());
 
 //
 //   Start the Web Server and initialize WebContext
 //
   server.begin();
   ctx.setup(&server,WiFi.localIP(),SERVER_PORT);
-  Serial.printf("Web Server started on %s:%d/\n\n",ctx.getLocalIPAddress().toString().c_str(),ctx.getLocalPort());
+  Serial.printf("Web Server started on %s:%d/\n\n",ctx.getLocalIPAddress().toString().c_str(),
+                                                   ctx.getLocalPort());
   
 //
 //   Build the device heirarchy
@@ -168,7 +170,7 @@ void setup() {
   while(WiFi.status() != WL_CONNECTED) {Serial.print(".");delay(500);}
 
   Serial.printf("\nWiFi Connected to %s with IP address: %s\n",WiFi.SSID().c_str(),
-                                                               WiFi.localIP().toString().c_str());
+                                                           WiFi.localIP().toString().c_str());
   
   // Perform an SSDP search for RootDevices and print display name and location
   char nameBuff[64];

@@ -249,3 +249,5 @@ and SSDP response Header names and values will be one of the following:
 ```
 
 The timeout parameter defaults to 2 seconds, which is most likely too slow so the example above uses 10. Also, SSDP uses UDP, which is inherently unreliable. If you don't see all of the devices you expect, either increase the timeout or re-run the query.
+
+For an example of device search see the class ExtendedDevice in the [DeviceLib library](https://github.com/dltoth/DeviceLib./)

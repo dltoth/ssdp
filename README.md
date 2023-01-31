@@ -116,7 +116,7 @@ Device Test has no Devices
 The device is now on the network responding to SSDP queries. 
 
 ## Simple Query Example  ##
-An Arduino sketch for ESP8266 that queries for RootDevices and prints selected headers to Serial can be found in [examples/SearchDevices](https://github.com/dltoth/ssdp/blob/main/examples/RootDevice/SearchDevices.ino); the important parts are:
+An Arduino sketch for ESP8266 that queries for RootDevices and prints selected headers to Serial can be found in [examples/SearchDevices](https://github.com/dltoth/ssdp/blob/main/examples/SearchDevices/SearchDevices.ino); the important parts are:
 
 Again, the namespace is **lsc**
 

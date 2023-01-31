@@ -153,7 +153,7 @@ The Search Target (ST) is *upnp:rootdevice* and the lambda function fills displa
 
 ```
 
-Now flash one device with [examples/RootDevice](https://github.com/dltoth/ssdp/blob/main/examples/RootDevice/RootDevice.ino) and power it up, but not from the Arduino IDE Serial port. Flash another device with [examples/SearchDevices](https://github.com/dltoth/ssdp/blob/main/examples/RootDevice/RootDevice.ino) but plugged into the Arduino IDE Serial port. The output will look something like:
+Now flash one device with [examples/RootDevice](https://github.com/dltoth/ssdp/blob/main/examples/RootDevice/RootDevice.ino) and power it up, but not from the Arduino IDE Serial port. Flash another device with [examples/SearchDevices](https://github.com/dltoth/ssdp/blob/main/examples/SearchDevices/SearchDevices.ino) and output from the Arduino IDE Serial port will look something like:
 
 ```
 Starting SSDP Query Test for Board ESP8266

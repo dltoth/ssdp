@@ -1,7 +1,7 @@
 # SSDP #
  The most common way to find your ESP devices on a local network is to give them a hard coded domain name and use mDNS. This means that as a developer you have to keep track all device names on your network and avoid naming conflicts. Simple Service Discovery Protocol (SSDP) is part of the Universal Plug and Play (UPnP) family of protocols. It provides a means to find devices on a local network automatically without mDNS. One device can be named and all others can be discovered.
  
-This SSDP library is an abbreviated version of [UPnP SSDP](http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf) that provides just enough information to populate a UPnP device hierarchy (root, embedded devices, and Services) and allow query for device availability. The code is intended for Arduino devices ESP8266 and ESP32. This library requires the additional [UPnPDevice library](https://github.com/dltoth/UPnPDevice/) for device structure, which in turn requires the [CommonUtil library](https://github.com/dltoth/UPnPDevice/) for device user interface.
+This SSDP library is an abbreviated version of [UPnP SSDP](http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf) that provides just enough information to populate a UPnP device hierarchy (root, embedded devices, and Services) and allow query for device availability. The code is intended for Arduino devices ESP8266 and ESP32. This library requires the additional [UPnPDevice library](https://github.com/dltoth/UPnPDevice/) for device structure, which in turn requires the [CommonUtil library](https://github.com/dltoth/CommonUtil/) for device user interface.
 ## Description ##
 <br>The protocol implemented here is not strictly SSDP, but rather an abbreviated version of the protocol with four main goals: 
 <ol>
@@ -116,7 +116,7 @@ Device Test has no Devices
 The device is now on the network responding to SSDP queries. 
 
 ## Simple Query Example  ##
-An Arduino sketch for ESP8266 that queries for RootDevices and prints selected headers to Serial can be found in [examples/SearchDevices](https://github.com/dltoth/ssdp/blob/main/examples/RootDevice/RootDevice.ino); the important parts are:
+An Arduino sketch for ESP8266 that queries for RootDevices and prints selected headers to Serial can be found in [examples/SearchDevices](https://github.com/dltoth/ssdp/blob/main/examples/RootDevice/SearchDevices.ino); the important parts are:
 
 Again, the namespace is **lsc**
 

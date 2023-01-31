@@ -2,8 +2,8 @@
 #include <ESP8266WiFi.h>
 
 using namespace lsc;
-#define AP_SSID "Dumbledore 1.0"
-#define AP_PSK  "2badboys"
+#define AP_SSID "My_SSID"
+#define AP_PSK  "MYPSK"
 #define BOARD "ESP8266"
 
 void setup() {

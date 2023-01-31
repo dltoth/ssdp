@@ -49,6 +49,8 @@ void setup() {
   root.setTarget("device");  
   root.setup(&ctx);
   
+  ssdp.begin(&root);
+  
   RootDevice::printInfo(&root);  
 }
 

@@ -1,8 +1,8 @@
 #include <ssdp.h>
 using namespace lsc;
 
-#define AP_SSID "Dumbledore 1.0"
-#define AP_PSK  "2badboys"
+#define AP_SSID "My_SSID"
+#define AP_PSK  "MYPSK"
 #define SERVER_PORT 80
 
 #include <ESP8266WiFi.h>

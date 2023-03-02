@@ -100,18 +100,18 @@ void loop() {
 Output from the Serial port will be something like:
 
 ```
-Starting UPnPDevice Test for Board ESP8266
+Starting SSDP for Board ESP8266
 Connecting to Access Point My_SSID
 ...........
 WiFi Connected to My_SSID with IP address: 10.0.0.165
 Web Server started on 10.0.0.165:80/
 
-Device Test:
+SSDP Test:
    UUID: b2234c12-417f-4e3c-b5d6-4d418143e85d
    Type: urn:LeelanauSoftwareCo-com:device:RootDevice:1
    Location is http://10.0.0.165:80/device
-   Device Test has no Services
-Device Test has no Devices
+   SSDP Test has no Services
+SSDP Test has no Devices
 ```
 
 The device is now on the network responding to SSDP queries. 
@@ -162,7 +162,7 @@ Connecting to Access Point My_SSID
 ...........
 WiFi Connected to My_SSID with IP address: 10.0.0.165
 Starting RootDevice search...
-Root Device Device Test 
+Root Device SSDP Test 
       USN: uuid:b2234c12-417f-4e3c-b5d6-4d418143e85d::urn:LeelanauSoftwareCo-com:device:RootDevice:1 
       LOCATION: http://10.0.0.165:80/
       DESC: :name:Device Test:devices:0:services:0:

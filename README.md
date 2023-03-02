@@ -1,19 +1,20 @@
 # SSDP #
- The most common way to find your ESP devices on a local network is to give them a hard coded domain name and use mDNS. This means that as a developer you have to keep track all device names on your network and avoid naming conflicts. Simple Service Discovery Protocol (SSDP) is part of the Universal Plug and Play (UPnP) family of protocols. It provides a means to find devices on a local network automatically without mDNS. One device can be named and all others can be discovered.
+The most common way to find ESP devices on a local network is to use mDNS and give each device a hard coded host name. This means that device developers  have to keep track all device names on the local network and avoid naming conflicts. Simple Service Discovery Protocol (SSDP) is part of the Universal Plug and Play (UPnP) family of protocols. It provides a means to find devices on a local network automatically without mDNS. One device can be named and all others can be discovered.
  
 This SSDP library is an abbreviated version of [UPnP SSDP](http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf) that provides just enough information to populate a UPnP device hierarchy (root, embedded devices, and Services) and allow query for device availability. The code is intended for Arduino devices ESP8266 and ESP32. This library requires the additional [UPnPDevice library](https://github.com/dltoth/UPnPDevice/) for device structure, which in turn requires the [CommonUtil library](https://github.com/dltoth/CommonUtil/) for device user interface.
+
 ## Description ##
-<br>The protocol implemented here is not strictly SSDP, but rather an abbreviated version of the protocol with four main goals: 
-<ol>
-  <li> Reduce chattiness of standard UPnP/SSDP by only responding to known search requests</li> 
-  <li>Provide enough information to populate a device hierarchy of the environment</li>
-  <li>Allow query to see if root devices are still available on the network and</li>
-  <li>Find instances of a specific Device (or Service) type on the network</li>
-</ol>
 
-SSDP is chatty and could easily consume a small device responding to unnecessary requests. To this end a custom Search Target header, ST.LEELANAUSOFTWARECO.COM, is added. Search requests without this header are silently ignored. This abreviated protocol does not advertise on startup or shutdown, thus avoiding a flurry of unnecessary UPnP activiy. Devices respond ONLY to specific queries, and ignore all other SSDP requests.
+The protocol implemented here is not strictly SSDP, but rather an abbreviated version of the protocol with four main goals: 
 
-In order to succinctly describe device hierarchy, a custom response header, DESC.LEELANAUSOFTWARECO.COM, is added. Search responses without this header are ignored. The DESC header includes a custom field descriptor, puuid, which refers to the parent uuid of a given UPnPDevice (or UPnPService). In this implementation of UPnP, RootDevices can have UPnPServices and UPnPDevices, and UPnPDevices can only have UPnPServices. The maximum number of embedded devices (or services) is restricted 8, thus limiting the device hierarchy. The DESC header field can implicitly refer to a either a RootDevice, an embedded UPnPDevice, or a UPnPService. When coupled with the Unique Service Name (USN), a complete device description in context is given. For example, for a UPnPDevice with uuid <i>device-UUID</i> and type <i>deviceType</i>:
+1. Reduce chattiness of standard UPnP/SSDP by only responding to known search requests 
+2. Provide enough information to populate a device hierarchy of the environment
+3. Allow query to see if root devices are still available on the network and
+4. Find instances of a specific Device (or Service) type on the network
+
+SSDP is chatty and could easily consume a small device responding to unnecessary requests. To this end a custom Search Target header, ST.LEELANAUSOFTWARE.COM, is added. Search requests without this header are silently ignored. This abreviated protocol does not advertise on startup or shutdown, thus avoiding a flurry of unnecessary UPnP activiy. Devices respond ONLY to specific queries, and ignore all other SSDP requests.
+
+In order to succinctly describe device hierarchy, a custom response header, DESC.LEELANAUSOFTWARE.COM, is added. Search responses without this header are ignored. The DESC header includes a custom field descriptor, puuid, which refers to the parent uuid of a given UPnPDevice (or UPnPService). In this implementation of UPnP, RootDevices can have UPnPServices and UPnPDevices, and UPnPDevices can only have UPnPServices. The maximum number of embedded devices (or services) is restricted 8, thus limiting the device hierarchy. The DESC header field can implicitly refer to a either a RootDevice, an embedded UPnPDevice, or a UPnPService. When coupled with the Unique Service Name (USN), a complete device description in context is given. For example, for a UPnPDevice with uuid <i>device-UUID</i> and type <i>deviceType</i>:
 
 ```
 USN: uuid:device-UUID::urn:domain-name:device:deviceType:ver

@@ -1,8 +1,31 @@
+/**
+ * 
+ *  ssdp Library
+ *  Copyright (C) 2023  Daniel L Toth
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published 
+ *  by the Free Software Foundation, either version 3 of the License, or any 
+ *  later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *  
+ *  The author can be contacted at dan@leelanausoftware.com  
+ *
+ */
+
+
 #include <ssdp.h>
 using namespace lsc;
 
 #define AP_SSID "My_SSID"
-#define AP_PSK  "MYPSK"
+#define AP_PSK  "MY_PSK"
 #define SERVER_PORT 80
 
 #include <ESP8266WiFi.h>
@@ -25,7 +48,7 @@ void setup() {
   }
 
   Serial.println();
-  Serial.printf("Starting UPnPDevice Test for Board %s\n",BOARD);
+  Serial.printf("Starting SSDP for Board %s\n",BOARD);
 
   WiFi.begin(AP_SSID,AP_PSK);
   Serial.printf("Connecting to Access Point %s\n",AP_SSID);
@@ -45,7 +68,7 @@ void setup() {
 /**
  *   Set up the RootDevice
  */
-  root.setDisplayName("Device Test");
+  root.setDisplayName("SSDP Test");
   root.setTarget("device");  
   root.setup(&ctx);
   

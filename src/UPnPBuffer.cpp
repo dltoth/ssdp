@@ -1,6 +1,23 @@
-
 /**
  * 
+ *  ssdp Library
+ *  Copyright (C) 2023  Daniel L Toth
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published 
+ *  by the Free Software Foundation, either version 3 of the License, or any 
+ *  later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *  
+ *  The author can be contacted at dan@leelanausoftware.com  
+ *
  */
 
 #include "UPnPBuffer.h"
@@ -9,7 +26,7 @@ namespace lsc {
 
 const char M_SEARCH_HEADER[]     PROGMEM = "M-SEARCH";
 const char RESPONSE_HEADER[]     PROGMEM = "HTTP/1.1";
-const char DESC_LSC_HEADER[]     PROGMEM = "DESC.LEELANAUSOFTWARECO.COM";
+const char DESC_LSC_HEADER[]     PROGMEM = "DESC.LEELANAUSOFTWARE.COM";
 const char END_OF_LINE[]         PROGMEM = "\r\n";
 
 

@@ -1,6 +1,27 @@
+/**
+ * 
+ *  ssdp Library
+ *  Copyright (C) 2023  Daniel L Toth
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published 
+ *  by the Free Software Foundation, either version 3 of the License, or any 
+ *  later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *  
+ *  The author can be contacted at dan@leelanausoftware.com  
+ *
+ */
 
 /**
- *  This protocol is not strictly SSDP, but rather an abbreviated version of the protocol with three main goals:
+ *  This protocol is not strictly SSDP, but rather an abbreviated version of the protocol with the following goals:
  *  (1) Reduce chattiness of standard UPnP/SSDP by only responding to known search requests
  *  (2) Provide enough information to populate a device hierarchy of the environment and
  *  (3) Allow query to see if root devices are still available on the network
@@ -9,11 +30,11 @@
  *  IP address and port of the request.
  *  
  *  SSDP is chatty and could easily consume a small device responding to unnecessary requests. To this end we add a custom Search 
- *  Target header, ST.LEELANAUSOFTWARECO.COM described below. Search requests without this header are silently ignored. This abreviated 
+ *  Target header, ST.LEELANAUSOFTWARE.COM described below. Search requests without this header are silently ignored. This abreviated 
  *  protocol does not advertise on startup or shutdown, thus avoiding a flurry of unnecessary UPnP activiy. Devices respond ONLY to specific 
  *  queries, and ignore all other SSDP requests.
  *  
- *  In order to succinctly describe device hierarchy, we add a custom response header, DESC.LEELANAUSOFTWARECO.COM. In this implementation
+ *  In order to succinctly describe device hierarchy, we add a custom response header, DESC.LEELANAUSOFTWARE.COM. In this implementation
  *  of UPnP, RootDevices can have UPnPServices and UPnPDevices, and UPnPDevices can only have UPnPServices.The maximum number of embedded 
  *  devices (or services) is restricted 8, thus limiting the device hierarchy. We also add a custom field descriptor, puuid, which refers 
  *  to the parent uuid of a given UPnPDevice (or UPnPService). The DESC header field, defined below, can implicitly refer to a either a 
@@ -24,7 +45,7 @@
  *  Unique Service Name - USN is always uuid:device-UUID::urn:domain-name:device:deviceType:ver for a device (or Rootdevice) or
  *                                      uuid:device-UUID::urn:domain-name:service:serviceType:ver for a service
  *
- *  Device Description  - DESC.LEELANAUSOFTWARECO.COM is :name:displayName:devices:num-devices:services:num-services: for Root Device
+ *  Device Description  - DESC.LEELANAUSOFTWARE.COM is :name:displayName:devices:num-devices:services:num-services: for Root Device
  *                                                       :name:displayName:services:num-services:puuid:parent-uuid: for an embedded Device and
  *                                                       :name:displayName:puuid:parent-uuid: for a Service 
  *                        where displayName is for display on a user interface, num-services is the number of services, num-devices is the number of 
@@ -39,20 +60,20 @@
  *  
  *  (1)    M-SEARCH Request header:
  *         ST:  upnp:rootdevice        Responds once for each root device
- *         ST.LEELANAUSOFTWARECO.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device and once for each service for each Root Device
+ *         ST.LEELANAUSOFTWARE.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device and once for each service for each Root Device
  *                                     If empty, responds for each root device only. This is a required header
  *         
  *         Response Headers: 
  *         ST:  upnp:rootdevice
  *         USN: uuid:device-UUID::urn:domain-name:device:deviceType:ver for a device or
  *              uuid:device-UUID::urn:domain-name:service:serviceType:ver for a service
- *         DESC.LEELANAUSOFTWARECO.COM: name:displayName:devices:num-devices:services:num-services for a RootDevice or
+ *         DESC.LEELANAUSOFTWARE.COM: name:displayName:devices:num-devices:services:num-services for a RootDevice or
  *                                      name:displayName:services:num-services:puuid:parent-uuid for an embedded device or
  *                                      name:displayName:puuid:parent-uuid: for a UPnPService
  *              
  *  (2)    M-SEARCH Request Header:
  *         ST:  uuid:device-UUID       Devices respond if either Root or an embedded Device have a matching uuid 
- *         ST.LEELANAUSOFTWARECO.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device (for RootDevices) and 
+ *         ST.LEELANAUSOFTWARE.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device (for RootDevices) and 
  *                                     once for each service. If empty, responds for the matching device only. This is 
  *                                     a required header.
  *         
@@ -60,7 +81,7 @@
  *         ST:  uuid:device-UUID for Device with matching uuid
  *         USN: uuid:device-UUID::urn:domain-name:device:deviceType:ver for a device or
  *              uuid:device-UUID::urn:domain-name:service:serviceType:ver for a service
- *         DESC.LEELANAUSOFTWARECO.COM: name:displayName:devices:num-devices:services:num-services for the RootDevice or
+ *         DESC.LEELANAUSOFTWARE.COM: name:displayName:devices:num-devices:services:num-services for the RootDevice or
  *                                      name:displayName:services:num-services:puuid:parent-uuid for an embedded device or
  *                                      name:displayName:puuid:parent-uuid: for a UPnPService
  *                                      
@@ -69,14 +90,14 @@
  *             urn:domain-name:service:serviceType:ver    for service search
  *                                     Responses are sent for each matching Device (or Service)
  *                           
- *         ST.LEELANAUSOFTWARECO.COM:  Required header, value not used
+ *         ST.LEELANAUSOFTWARE.COM:  Required header, value not used
  *         
  *         Response Headers:
  *         ST:  urn:domain-name:device:deviceType:ver   for Device with matching device-type or
  *              urn:domain-name:service:serviceType:ver for Service with matchint type
  *         USN: uuid:device-UUID::urn:domain-name:device:deviceType:ver for a device or
  *              uuid:device-UUID::urn:domain-name:service:serviceType:ver for a service
- *         DESC.LEELANAUSOFTWARECO.COM: name:displayName:devices:num-devices:services:num-services for the RootDevice or
+ *         DESC.LEELANAUSOFTWARE.COM: name:displayName:devices:num-devices:services:num-services for the RootDevice or
  *                                      name:displayName:services:num-services:puuid:parent-uuid for an embedded device or
  *                                      name:displayName:puuid:parent-uuid: for a UPnPService
  *                                      
@@ -86,7 +107,7 @@
  *      LOCATION: Device URL
  *      ST: ST from M-SEARCH request
  *      USN: device USN
- *      DESC.LEELANAUSOFTWARECO.COM: name:displayName:devices:num-devices:services:num-services for the RootDevice or
+ *      DESC.LEELANAUSOFTWARE.COM: name:displayName:devices:num-devices:services:num-services for the RootDevice or
  *                                   name:displayName:services:num-services:puuid:parent-uuid for an embedded device
  *   
  *   SSDP Service Response:
@@ -95,7 +116,7 @@
  *      LOCATION: Service URL relative to the Device URL
  *      ST: ST from M-SEARCH request
  *      USN: service USN
- *      DESC.LEELANAUSOFTWARECO.COM: name:displayName:puuid:parent-uuid:
+ *      DESC.LEELANAUSOFTWARE.COM: name:displayName:puuid:parent-uuid:
   
  */
 
@@ -149,45 +170,45 @@ const char  SERVICE_RESPONSE[]    PROGMEM = "HTTP/1.1 200 OK \r\n"
                                          "LOCATION: %s\r\n"                                                          // Service Location
                                          "ST: %s\r\n"                                                                // Search Target
                                          "USN: uuid:%s::%s\r\n"                                                      // Parent Device uuid and Service type
-                                         "DESC.LEELANAUSOFTWARECO.COM: :name:%s:puuid:%s:\r\n\r\n\r\n";              // name and parent Device uuid
+                                         "DESC.LEELANAUSOFTWARE.COM: :name:%s:puuid:%s:\r\n\r\n\r\n";              // name and parent Device uuid
 
 const char  DEVICE_RESPONSE[]     PROGMEM = "HTTP/1.1 200 OK \r\n"
                                          "CACHE-CONTROL: max-age = 1800 \r\n"
                                          "LOCATION: %s\r\n"                                                          // Device Location
                                          "ST: %s\r\n"                                                                // Search Target
                                          "USN: uuid:%s::%s\r\n"                                                      // uuid and device type
-                                         "DESC.LEELANAUSOFTWARECO.COM: :name:%s:services:%d:puuid:%s:\r\n\r\n\r\n";  // name, number of services, and parent uuid   
+                                         "DESC.LEELANAUSOFTWARE.COM: :name:%s:services:%d:puuid:%s:\r\n\r\n\r\n";  // name, number of services, and parent uuid   
 
 const char  ROOT_RESPONSE[]       PROGMEM = "HTTP/1.1 200 OK \r\n"
                                          "CACHE-CONTROL: max-age = 1800 \r\n"
                                          "LOCATION: %s\r\n"                                                           // Root Location
                                          "ST: %s\r\n"                                                                 // Search Target
                                          "USN: uuid:%s::%s\r\n"                                                       // uuid and device type
-                                         "DESC.LEELANAUSOFTWARECO.COM: :name:%s:devices:%d:services:%d:\r\n\r\n\r\n"; // Number of Devices and Number of Services 
+                                         "DESC.LEELANAUSOFTWARE.COM: :name:%s:devices:%d:services:%d:\r\n\r\n\r\n"; // Number of Devices and Number of Services 
 
 const char SSDP_RootSearch[]      PROGMEM = "M-SEARCH * HTTP/1.1\r\n"
                                         "HOST: 239.255.255.250:1900\r\n"
                                         "MAN: ssdp:discover\r\n"
                                         "ST: upnp:rootdevice\r\n"
-                                        "ST.LEELANAUSOFTWARECO.COM: \r\n"
+                                        "ST.LEELANAUSOFTWARE.COM: \r\n"
                                         "USER-AGENT: ESP8266 UPnP/1.1 LSC-SSDP/1.0\r\n\r\n";
 const char SSDP_RootAllSearch[]   PROGMEM = "M-SEARCH * HTTP/1.1\r\n"
                                         "HOST: 239.255.255.250:1900\r\n"
                                         "MAN: ssdp:discover\r\n"
                                         "ST: upnp:rootdevice\r\n"
-                                        "ST.LEELANAUSOFTWARECO.COM: ssdp:all\r\n"
+                                        "ST.LEELANAUSOFTWARE.COM: ssdp:all\r\n"
                                         "USER-AGENT: ESP8266 UPnP/1.1 LSC-SSDP/1.0\r\n\r\n";
 const char SSDP_Search[]          PROGMEM = "M-SEARCH * HTTP/1.1\r\n"
                                         "HOST: 239.255.255.250:1900\r\n"
                                         "MAN: ssdp:discover\r\n"
                                         "ST: %s\r\n"
-                                        "ST.LEELANAUSOFTWARECO.COM: ssdp:all\r\n"
+                                        "ST.LEELANAUSOFTWARE.COM: ssdp:all\r\n"
                                         "USER-AGENT: ESP8266 UPnP/1.1 LSC-SSDP/1.0\r\n\r\n";
 
 /** Header field constants
  *  
  */
-const char ST_LSC_HEADER[]       PROGMEM = "ST.LEELANAUSOFTWARECO.COM";
+const char ST_LSC_HEADER[]       PROGMEM = "ST.LEELANAUSOFTWARE.COM";
 const char ST_HEADER[]           PROGMEM = "ST";
 const char USN_HEADER[]          PROGMEM = "USN";
 const char ST_UPNP_ROOTDEVICE[]  PROGMEM = "upnp:rootdevice";
@@ -246,7 +267,7 @@ void SSDP::doSSDP() {
 }
 
 /**
- *   Send an SSDP request and parse responses with SSDPHandler. Parse responses as long as they are vailable, but
+ *   Send an SSDP request and parse responses with SSDPHandler. Parse responses as long as they are viable, but
  *   don't wait any longer that timeout milliseconds for responses to come in.
  */
 SSDPResult SSDP::searchRequest(const char* ST, SSDPHandler handler, IPAddress ifc, int timeout, boolean ssdpAll) {
@@ -331,13 +352,13 @@ SSDPResult SSDP::searchRequest(const char* ST, SSDPHandler handler, IPAddress if
 }
 
 
-/**  Read UDP Channel and respond according to the ST and ST.LEELANAUSOFTWARECO.COM headers  
+/**  Read UDP Channel and respond according to the ST and ST.LEELANAUSOFTWARE.COM headers  
  *   
  *     ST:  upnp:rootdevice        Responds once for each root device
- *     ST.LEELANAUSOFTWARECO.COM:  ssdp:all (or empty)
+ *     ST.LEELANAUSOFTWARE.COM:  ssdp:all (or empty)
  *     or
  *     ST:  uuid:root-device-UUID  Root Devices respond if uuid matches
- *     ST.LEELANAUSOFTWARECO.COM:  Empty but required
+ *     ST.LEELANAUSOFTWARE.COM:  Empty but required
  *         
  */
 
@@ -412,8 +433,8 @@ void SSDP::doChannel(WiFiUDP& channel) {
 /**
  *      ST: 
  *      USN: service USN
- *      UPN.LEELANAUSOFTWARECO.COM: service UPN
- *      DESC.LEELANAUSOFTWARECO.COM: devices:num-devices:services:num-services on a device response and not present on a service response
+ *      UPN.LEELANAUSOFTWARE.COM: service UPN
+ *      DESC.LEELANAUSOFTWARE.COM: devices:num-devices:services:num-services on a device response and not present on a service response
  *      
  *   
  */
@@ -502,9 +523,21 @@ void SSDP::postAllResponse(UPnPDevice* d, const char* st, IPAddress remoteAddr, 
 }
 
 void SSDP::postAllMatching(UPnPDevice* d, const char* st, IPAddress remoteAddr, int port ) {
+  if( loggingLevel(FINEST) ) {
+    Serial.printf("SSDP::postAllMatching: Searching for device or service %s\n", st);
+    Serial.printf("                       Device type is  %s\n", d->getType());
+    if( d->isType(st) )  Serial.printf("                       Device type is a match, posting response\n");
+    else  Serial.printf("                       Device type is NOT a match\n");
+  }
   if(d->isType(st)) postDeviceResponse(d, st, remoteAddr, port );
   UPnPService** services = d->services();
+  Serial.printf("                       Searching services for device type %s\n", d->getType());
   for(int i=0; i<d->numServices(); i++ ) {
+    if( loggingLevel(FINEST) ) {
+       Serial.printf("                            Service type is  %s\n", services[i]->getType());
+       if( services[i]->isType(st) )  Serial.printf("                            Service type is a match, posting response\n");
+       else  Serial.printf("                            Service type is NOT a match\n");
+    }
     if( services[i]->isType(st) ) postServiceResponse(services[i],st,remoteAddr,port);
   }
   RootDevice* r = d->asRootDevice();

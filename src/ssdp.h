@@ -1,40 +1,64 @@
 /**
+ * 
+ *  ssdp Library
+ *  Copyright (C) 2023  Daniel L Toth
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published 
+ *  by the Free Software Foundation, either version 3 of the License, or any 
+ *  later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *  
+ *  The author can be contacted at dan@leelanausoftware.com  
+ *
+ */
+ 
+/**
  * ssdp.h
  *
- *  This protocol is not really SSDP, but rather an abbreviated version of the protocol with two main goals:
- *  (1) Provide enough information to populate a device hierarchy of the environment and
- *  (2) Query if devices are still available on the network
+ *  This protocol is not strictly SSDP, but rather an abbreviated version of the protocol with the following goals:
+ *  (1) Reduce chattiness of standard UPnP/SSDP by only responding to known search requests
+ *  (2) Provide enough information to populate a device hierarchy of the environment and
+ *  (3) Allow query to see if root devices are still available on the network
+ *  (4) Find instances of a specific Device (or Service) type on the network
  *  Search requests are sent out over the multicast address 239.255.255.250 port 1900 and responses are sent to the unicast
  *  IP address and port of the request.
  * 
  *  Unique Service Name - USN is always uuid:device-UUID::urn:domain-name:device:deviceType:ver for a device or
  *                                      uuid:device-UUID::urn:domain-name:service:serviceType:ver:serviceID for a service
  *                                      where serviceID is a unique service identifier within it's device
- *  Unique Parent Name  - UPN.LEELANAUSOFTWARECO.COM is always the USN of the parent of an embedded device or
+ *  Unique Parent Name  - UPN.LEELANAUSOFTWARE.COM is always the USN of the parent of an embedded device or
  *                                      upnp:rootdevice if the device is a root device
  *
  ** ST Search Target and USN Response values 
  *  
  *  (1)    M-SEARCH Request header:
  *         ST:  upnp:rootdevice        Responds once for each root device
- *         ST.LEELANAUSOFTWARECO.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device and once for each service for each Root Device
+ *         ST.LEELANAUSOFTWARE.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device and once for each service for each Root Device
  *                                     If empty, responds for each root device only. This is a required header
  *         
  *         Response Headers: 
  *         USN: uuid:device-UUID::urn:domain-name:device:deviceType:ver for a device or
  *              uuid:device-UUID::urn:domain-name:service:serviceType:ver for a service
- *         UPN.LEELANAUSOFTWARECO.COM: uuid:device-UUID::urn:domain-name:device:deviceType:ver of parent device or 
+ *         UPN.LEELANAUSOFTWARE.COM: uuid:device-UUID::urn:domain-name:device:deviceType:ver of parent device or 
  *                                     upnp:rootdevice if device is a root device
  *              
  *  (2)    M-SEARCH Request Header:
  *         ST:  uuid:root-device-UUID  Root Devices respond if uuid matches
- *         ST.LEELANAUSOFTWARECO.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device and once for each service for this Root Device
+ *         ST.LEELANAUSOFTWARE.COM:  ssdp:all (or empty). If ssdp:all, responds for each embedded device and once for each service for this Root Device
  *                                     If empty, responds for root device only. This is a required header
  *         
  *         Response Headers:
  *         USN: uuid:device-UUID::urn:domain-name:device:deviceType:ver for a device or
  *              uuid:device-UUID::urn:domain-name:service:serviceType:ver for a service
- *         UPN.LEELANAUSOFTWARECO.COM: uuid:device-UUID::urn:domain-name:device:deviceType:ver of parent device or 
+ *         UPN.LEELANAUSOFTWARE.COM: uuid:device-UUID::urn:domain-name:device:deviceType:ver of parent device or 
  *                                     upnp:rootdevice if device is a root device
  *         
  *   SSDP Device Response:
@@ -43,7 +67,7 @@
  *      LOCATION: Device URL
  *      ST: 
  *      USN: device USN
- *      UPN.LEELANAUSOFTWARECO.COM: device UPN
+ *      UPN.LEELANAUSOFTWARE.COM: device UPN
  *   
  *   SSDP Service Response:
  *      HTTP/1.1 200 OK
@@ -51,12 +75,13 @@
  *      LOCATION: Service URL relative to the Device URL
  *      ST: 
  *      USN: service USN
- *      UPN.LEELANAUSOFTWARECO.COM: service UPN
+ *      UPN.LEELANAUSOFTWARE.COM: service UPN
  *   
  */
  
 #ifndef SSDP_H
 #define SSDP_H
+
 #include <ctype.h>
 #include "UPnPBuffer.h"
 
@@ -113,11 +138,11 @@ class SSDP {
  *  Send an SSDP Search request and parse responses for timeout milliseconds.
  *  Each response is handed to an SSDPHandler for processing.
  *  Input Parameters:
- *     ST      - Search Type MUST be one of the following:
+ *     ST      - Search Target MUST be one of the following:
  *                 upnp:rootdevice
- *                 uuid:Device-UUID
- *                 urn:domain-name:device:deviceType:ver         For example - urn:LeelanauSoftwareCo-com:device:SoftwareClock:1
- *                 urn:domain-name:service:serviceType:ver       For example - urn:LeelanauSoftwareCo-com:service:GetDateTime:1
+ *                 uuid:Device-UUID                              For example - uuid: b2234c12-417f-4e3c-b5d6-4d418143e85d
+ *                 urn:domain-name:device:deviceType:ver         For example - urn:LEELANAUSOFTWARE-com:device:SoftwareClock:1
+ *                 urn:domain-name:service:serviceType:ver       For example - urn:LEELANAUSOFTWARE-com:service:GetDateTime:1
  *     handler - An SSDPHandler function called on each response to the request
  *     ifc     - The network interface to bind the request to (either WiFi.localIP() or WiFi.softAPIP())
  *     timeout - Listen for responses for timeout milliseconds and then return to caller. If ST is uuid:Devce-UUID, processing returns

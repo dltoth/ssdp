@@ -1,5 +1,5 @@
 # SSDP #
-The most common way to find ESP devices on a local network is to use mDNS and give each device a hard coded host name. This means that device developers  have to keep track all device names on the local network and avoid naming conflicts. Simple Service Discovery Protocol (SSDP) is part of the Universal Plug and Play (UPnP) family of protocols. It provides a means to find devices on a local network automatically without mDNS. One device can be named and all others can be discovered.
+The most common way to find ESP devices on a local network is to use mDNS and give each device a hard coded host name. This means that device developers  have to keep track all device names on the local network and avoid naming conflicts. Simple Service Discovery Protocol (SSDP) is part of the Universal Plug and Play (UPnP) standard, and provides a means to find devices on a local network automatically without mDNS. One device can be named and all others can be discovered.
  
 This SSDP library is an abbreviated version of [UPnP SSDP](http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.1.pdf) that provides just enough information to populate a UPnP device hierarchy (root, embedded devices, and Services) and allow query for device availability. The code is intended for Arduino devices ESP8266 and ESP32. This library requires the additional [UPnPDevice library](https://github.com/dltoth/UPnPDevice/) for device structure, which in turn requires the [CommonUtil library](https://github.com/dltoth/CommonUtil/) for device user interface.
 
@@ -36,15 +36,13 @@ Another important difference between this variant of SSDP and standard UPnP/SSDP
 LOCATION: http://10.0.0.165:80/rootDeviceTarget/
 ```
 
-for the HTML UI of a RootDevice whose target is set to <i>rootDeviceTarget</i>, or
+for the HTML UI of a RootDevice whose target is set to *rootDeviceTarget*, or
 
 ```
 LOCATION: http://10.0.0.165:80/rootDeviceTarget/embeddedDeviceTarget
 ```
 
-for the HTML UI of a UPnPDevice whose target is set to <i>embeddedDeviceTarget</i>.
-
-A more comprehensive description of the protocol is given in the companion SSDP User Guide document.
+for the HTML UI of a UPnPDevice whose target is set to *embeddedDeviceTarget*.
 
 ## Simple UPnPDevice Example ##
 A Simple sketch of conisting of a RootDevice that responds to SSDP queries can be found in [examples/RootDevice](https://github.com/dltoth/ssdp/blob/main/examples/RootDevice/RootDevice.ino); the important parts are:
